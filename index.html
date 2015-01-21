@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Ember-blog-introduction by TheIronDeveloper</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Ember-blog-introduction</h1>
+          <h2>A step-by-step guide to making a basic blog (made for my awesome team :) )</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/TheIronDeveloper/ember-blog-introduction/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/TheIronDeveloper/ember-blog-introduction/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/TheIronDeveloper/ember-blog-introduction" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="ember-blog-introduction" class="anchor" href="#ember-blog-introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>ember-blog-introduction</h1>
+
+<p>A step-by-step guide to making a basic blog</p>
+
+<hr>
+
+<p>Steps:</p>
+
+<ol>
+<li> <a href="#creating-posts-page">Creating Posts Page</a>
+</li>
+<li> <a href="#create-postid-page">Create Postid Page</a>
+</li>
+<li> <a href="#create-a-postsnew-page">Create a Posts/new Page</a>
+</li>
+<li> <a href="#handling-making-new-posts">Handling Making New Posts</a>
+</li>
+</ol>
+
+<hr>
+
+<h3>
+<a id="creating-posts-page" class="anchor" href="#creating-posts-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Posts Page</h3>
+
+<hr>
+
+<h4>
+<a id="create-the-project-blog" class="anchor" href="#create-the-project-blog" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create the project blog</h4>
+
+<pre><code>ember new test-blog; cd test-blog
+</code></pre>
+
+<h4>
+<a id="scaffold-posts-model-and-route" class="anchor" href="#scaffold-posts-model-and-route" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scaffold Post's model and route</h4>
+
+<pre><code>ember g resource posts
+</code></pre>
+
+<p>g is shorthand for generator. <code>resource</code> generates a model, route, tests, and template</p>
+
+<h4>
+<a id="run-ember-server" class="anchor" href="#run-ember-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run ember server</h4>
+
+<pre><code>ember server
+</code></pre>
+
+<p>ember server creates a watch to update minification</p>
+
+<h4>
+<a id="create-an-application-adapter" class="anchor" href="#create-an-application-adapter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create an Application Adapter</h4>
+
+<pre><code>ember g adapter application
+</code></pre>
+
+<p>in app/adapters/application</p>
+
+<pre><code>import DS from 'ember-data';
+export default DS.FixtureAdapter.extend();
+</code></pre>
+
+<p>We are making a global adapter for the application.
+The adapters tell ember how it is suppose to access model data. For now, lets set it to the FixtureAdapter</p>
+
+<h4>
+<a id="map-the-route-to-the-model" class="anchor" href="#map-the-route-to-the-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Map the route to the model</h4>
+
+<p>in routes/posts.js:</p>
+
+<pre><code>export default Ember.Route.extend({
+  model: function() {
+    return this.store.find('post');
+  }
+});
+</code></pre>
+
+<p>Because we are fetching with ember-data, the model has a relationship that depends on this.store.find()</p>
+
+<h4>
+<a id="define-the-post-model" class="anchor" href="#define-the-post-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define the Post Model</h4>
+
+<pre><code>var Posts = DS.Model.extend({
+  title: DS.attr('string'),
+  description: DS.attr('string')
+});
+
+export default Posts;
+</code></pre>
+
+<p>We are defining the schema for the posts model.
+We could do this with the generator, but its nice to go this route</p>
+
+<h4>
+<a id="define-fixtures" class="anchor" href="#define-fixtures" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define Fixtures</h4>
+
+<pre><code>Posts.reopenClass({
+  FIXTURES: [
+    {id: 1, title: 'hello world', 'description': 'world'},
+    {id: 2, title: 'hello world 2', 'description': 'hello world 2'}
+  ]
+});
+</code></pre>
+
+<h4>
+<a id="make-the-postindex-page" class="anchor" href="#make-the-postindex-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Make the PostIndex page</h4>
+
+<pre><code>ember g template posts/index
+</code></pre>
+
+<p>in templates/posts/index</p>
+
+<pre><code>&lt;ul&gt;
+   {{#each model}}
+    &lt;li&gt;{{title}}&lt;/li&gt;
+   {{/each}}
+&lt;/ul&gt;
+</code></pre>
+
+<h4>
+<a id="update-template-and-test" class="anchor" href="#update-template-and-test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update Template and Test</h4>
+
+<p>in templates/posts:</p>
+
+<pre><code>&lt;ul&gt;
+     {{#each model}}
+          &lt;li&gt;{{title}}&lt;/li&gt;
+     {{/each}}
+&lt;/ul&gt;
+</code></pre>
+
+<p>goto: <a href="http://0.0.0.0:4200/posts">http://0.0.0.0:4200/posts</a></p>
+
+<h3>
+<a id="create-postid-page" class="anchor" href="#create-postid-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create Post/:id Page</h3>
+
+<hr>
+
+<h4>
+<a id="scaffold-the-post-page" class="anchor" href="#scaffold-the-post-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scaffold the Post page</h4>
+
+<pre><code>ember g resource post
+(don’t override the model)
+</code></pre>
+
+<h4>
+<a id="update-router-with-post" class="anchor" href="#update-router-with-post" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update router with post</h4>
+
+<p>in router.js</p>
+
+<pre><code>this.resource("post", { path: '/post/:post_id' });
+</code></pre>
+
+<p>This adds the <code>/post/:id</code> path</p>
+
+<h4>
+<a id="update-post-router" class="anchor" href="#update-post-router" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update Post router</h4>
+
+<p>routes/post</p>
+
+<pre><code>model: function(params) {
+  return this.store.find('post', params.post_id);
+  }
+</code></pre>
+
+<h4>
+<a id="update-link-from-posts-to-post" class="anchor" href="#update-link-from-posts-to-post" aria-hidden="true"><span class="octicon octicon-link"></span></a>update link from posts to post</h4>
+
+<p>templates/posts/index</p>
+
+<pre><code>  {{#each model}}
+    &lt;li&gt;
+      {{#link-to 'post' this}} {{title}} {{/link-to}}
+    &lt;/li&gt;
+  {{/each}}
+</code></pre>
+
+<h4>
+<a id="add-content-to-the-post-page" class="anchor" href="#add-content-to-the-post-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add content to the post page</h4>
+
+<p>in templates/post:</p>
+
+<pre><code>&lt;h2&gt;{{title}}&lt;/h2&gt;
+&lt;p&gt;{{description}}&lt;/p&gt;
+</code></pre>
+
+<h3>
+<a id="create-a-postsnew-page" class="anchor" href="#create-a-postsnew-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Posts/New Page</h3>
+
+<hr>
+
+<h4>
+<a id="generate-a-controller-and-route" class="anchor" href="#generate-a-controller-and-route" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generate a controller and route</h4>
+
+<pre><code>ember g controller posts/new
+ember g route posts/new
+</code></pre>
+
+<h4>
+<a id="add-path-to-new-page" class="anchor" href="#add-path-to-new-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add path to new page</h4>
+
+<p>in templates/posts/index</p>
+
+<pre><code>{{#link-to 'posts.new'}}New Post{{/link-to}}
+</code></pre>
+
+<h4>
+<a id="update-the-content-on-the-postsnew-page" class="anchor" href="#update-the-content-on-the-postsnew-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update the content on the posts/new page</h4>
+
+<p>in templates/posts/new</p>
+
+<pre><code>&lt;h2&gt;New Post&lt;/h2&gt;
+{{input type="text" placeholder="Title" value=title}}
+{{textarea placeholder="content" value=description}}
+&lt;button {{action 'submit'}}&gt;Submit&lt;/button&gt;
+</code></pre>
+
+<h4>
+<a id="update-the-controller-to-handle-the-submit-action" class="anchor" href="#update-the-controller-to-handle-the-submit-action" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update the Controller to handle the submit action</h4>
+
+<p>in controller/posts/new</p>
+
+<pre><code>export default Ember.Controller.extend({
+       actions: {
+            submit: function(){
+                 var post = this.store.createRecord('post', {
+                      title: this.get('title'),
+                      description: this.get('description')
+                 });
+                 post.save();
+            }
+       }
+  });
+</code></pre>
+
+<h3>
+<a id="handling-making-new-posts" class="anchor" href="#handling-making-new-posts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Handling making new posts</h3>
+
+<hr>
+
+<h4>
+<a id="create-posts-mock" class="anchor" href="#create-posts-mock" aria-hidden="true"><span class="octicon octicon-link"></span></a>create posts mock</h4>
+
+<pre><code>ember g http-mock posts
+</code></pre>
+
+<p>Creates <code>/server/mocks/posts</code></p>
+
+<h4>
+<a id="update-our-adapater-to-restadapter" class="anchor" href="#update-our-adapater-to-restadapter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update our adapater to RESTADAPTER</h4>
+
+<p>in adapters/application</p>
+
+<pre><code>export default DS.RESTAdapter.extend({
+     namespace: 'api'
+});
+</code></pre>
+
+<h4>
+<a id="update-mocks-to-have-an-in-memory-store" class="anchor" href="#update-mocks-to-have-an-in-memory-store" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update mocks to have an in memory store</h4>
+
+<p>in server/mocks/posts:
+  copy/paste:
+    <a href="https://gist.github.com/TheIronDeveloper/69de8b6273586f155d2b">https://gist.github.com/TheIronDeveloper/69de8b6273586f155d2b</a></p>
+
+<h4>
+<a id="update-the-controller-to-redirect-on-success" class="anchor" href="#update-the-controller-to-redirect-on-success" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update the Controller to redirect on success</h4>
+
+<p>in controller/posts: </p>
+
+<pre><code>export default Ember.Controller.extend({
+  actions: {
+    submit: function(){
+      var post = this.store.createRecord('post', {
+          title: this.get('title'),
+          description: this.get('description')
+        }),
+        self = this;
+      post.save().then(function(){
+        self.transitionToRoute('posts');
+      });
+    }
+  }
+});
+</code></pre>
+
+<h3>
+<a id="future-" class="anchor" href="#future-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future ?</h3>
+
+<p>Add comments?
+add an edit page?
+discussion?</p>
+        </section>
+
+        <footer>
+          Ember-blog-introduction is maintained by <a href="https://github.com/TheIronDeveloper">TheIronDeveloper</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
