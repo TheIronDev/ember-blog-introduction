@@ -13,6 +13,7 @@ Steps:
 ---
 
 ### Creating Posts Page
+---
 
 #### Create the project blog
 ```
@@ -101,6 +102,7 @@ in templates/posts:
 goto: http://0.0.0.0:4200/posts
 
 ### Create Post/:id Page
+---
 
 #### Scaffold the Post page 
 ```
@@ -142,6 +144,7 @@ in templates/post:
 
 
 ### Create a Posts/New Page
+---
 
 #### Generate a controller and route
 ```
@@ -181,6 +184,7 @@ export default Ember.Controller.extend({
 ```
 
 ### Handling making new posts
+---
 
 #### create posts mock 
 ```
