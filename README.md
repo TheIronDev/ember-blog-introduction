@@ -175,4 +175,41 @@ export default Ember.Controller.extend({
 ```
 ember g http-mock posts
 ```
-Creates `server/mocks/posts`
+Creates `/server/mocks/posts`
+
+#### Update our adapater to RESTADAPTER
+in adapters/application
+```
+export default DS.RESTAdapter.extend({
+     namespace: 'api'
+});
+```
+
+#### Update mocks to have an in memory store
+in server/mocks/posts:
+  copy/paste:
+    https://gist.github.com/TheIronDeveloper/69de8b6273586f155d2b
+    
+#### Update the Controller to redirect on success
+in controller/posts: 
+```
+export default Ember.Controller.extend({
+  actions: {
+    submit: function(){
+      var post = this.store.createRecord('post', {
+          title: this.get('title'),
+          description: this.get('description')
+        }),
+        self = this;
+      post.save().then(function(){
+        self.transitionToRoute('posts');
+      });
+    }
+  }
+});
+```
+
+### Future ?
+Add comments?
+add an edit page?
+discussion?
