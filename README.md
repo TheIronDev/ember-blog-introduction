@@ -4,6 +4,7 @@ A step-by-step guide to making a basic blog
 ---
 
 Steps:
+
 1.  [Creating Posts Page](#creating-posts-page)
 2.  [Create Postid Page](#create-postid-page)
 3.  [Create a Posts/new Page](#create-a-postsnew-page)
