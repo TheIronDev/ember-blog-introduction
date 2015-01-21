@@ -15,9 +15,11 @@ Steps:
 ### Creating Posts Page
 ---
 
-#### Create the project blog
+#### Install Ember-CLI and create the project blog
 ```
-ember new test-blog; cd test-blog
+npm install -g ember-cli
+ember new test-blog
+cd test-blog
 ```
 
 #### Scaffold Post's model and route
